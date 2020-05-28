@@ -7,7 +7,16 @@ import smtplib
 from mygoodwe import Goodwe
 from globals import *
 
+bat_stat_txt = { 0 : 'Non', 1 : '?', 2 : 'Discharging', 3 : 'Charging'}
+bat_mail = 1
+soc_mail = 1
+dict_pv = []
+dict_load = []
+dict_bat = []
+dict_grid = []
 
+# function send email to google 
+# param msg - text message
 def send_mail(msg):
 	subject = 'MY SEMS INFO'
 	body = 'Automation info from my sems: \n\n %s' % msg
@@ -35,15 +44,11 @@ def send_mail(msg):
 def my_avg(my_dict):
 	return round(sum(my_dict) / len(my_dict),0)
 
-#params id,username,password
+
+
+#create instance of goodwe object
 gw = Goodwe(SEMS_ID,SEMS_USR,SEMS_PWD)
 
-dict_pv = []
-dict_load = []
-dict_bat = []
-dict_grid = []
-
-#send_mail("test \r\n ")
 
 running = True
 while running:
@@ -55,17 +60,23 @@ while running:
 		dict_load.pop(0)
 		dict_bat.pop(0)
 		dict_grid.pop(0)
+		bat_mail = 1
 
 	dict_pv.append(dict_data['pv'])
 	dict_load.append(dict_data['load'])
-	dict_bat.append(dict_data['battery'])
 	dict_grid.append(dict_data['grid'])
-	str_out = "AVG PV:%d | AVG LOAD:%d | AVG BAT:%d | AVG GRID:%d | SOC %d" % (my_avg(dict_pv),my_avg(dict_load),my_avg(dict_bat),my_avg(dict_grid),dict_data['soc'])
-	print(str_out)
-	print(dict_data['bat_sta'])
+	str_out = "AVG PV:%d | AVG LOAD:%d | AVG BAT:%d | AVG GRID:%d | SOC %d  %s" % (my_avg(dict_pv),my_avg(dict_load),my_avg(dict_bat),my_avg(dict_grid),dict_data['soc'],bat_stat_txt[dict_data['bat_sta']])
+#	print(str_out)
+	print(dict_bat)
 	print("--------------------------------------------------------------------")
-	if my_avg(dict_bat) > 2000 and dict_data['bat_sta'] == 3 :
+	if my_avg(dict_bat) > 2000 and dict_data['bat_sta'] == 3 and bat_mail > 0:
 		send_mail("SEMS INFO \r\n %s" %str_out)
+		bat_mail = 0
+
+	if dict_data['soc'] == 70 and soc_mail > 0:
+                send_mail("SEMS INFO Battery 70% \r\n %s" %str_out)
+                soc_mail = 0
+
 	time.sleep(60)
 
 
