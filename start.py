@@ -71,7 +71,7 @@ while running:
 		send_mail("SEMS INFO \r\n %s" %str_out)
 		bat_mail = 0
 
-	if dict_data['soc'] == 70 and soc_mail > 0:
+	if dict_data['soc'] == 70 and dict_data['bat_sta'] == 3 and soc_mail > 0:
                 send_mail("SEMS INFO Battery 70% \r\n %s" %str_out)
                 soc_mail = 0
 
