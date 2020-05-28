@@ -15,8 +15,8 @@ dict_load = []
 dict_bat = []
 dict_grid = []
 
-# function send email to google 
-# param msg - text message
+# send email 
+# param mail text
 def send_mail(msg):
 	subject = 'MY SEMS INFO'
 	body = 'Automation info from my sems: \n\n %s' % msg
@@ -45,10 +45,8 @@ def my_avg(my_dict):
 	return round(sum(my_dict) / len(my_dict),0)
 
 
-
 #create instance of goodwe object
 gw = Goodwe(SEMS_ID,SEMS_USR,SEMS_PWD)
-
 
 running = True
 while running:
