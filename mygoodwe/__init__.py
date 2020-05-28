@@ -73,6 +73,8 @@ class  Goodwe:
 					self.token = json.dumps(data['data'])
 			except requests.exceptions.RequestException as exp:
 				print(exp)
+			except ValueError:
+				print("Could not convert data to an float.")
 
 			time.sleep(i ** 3)
 

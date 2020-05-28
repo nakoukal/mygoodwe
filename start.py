@@ -10,6 +10,7 @@ from globals import *
 bat_stat_txt = { 0 : 'Non', 1 : '?', 2 : 'Discharging', 3 : 'Charging'}
 bat_mail = 1
 soc_mail = 1
+on_mail = 1
 dict_pv = []
 dict_load = []
 dict_bat = []
@@ -60,17 +61,31 @@ while running:
 		dict_grid.pop(0)
 		bat_mail = 1
 
+	if len(dict_data) == 0:
+		send_mail("SEMS OFFLINE \r\n")
+		on_mail = 1
+		time.sleep(300)
+		continue
+
+	if on_mail == 1:
+		send_mail("SEMS ONLINE \r\n")
+		on_mail = 0
+
 	dict_pv.append(dict_data['pv'])
 	dict_load.append(dict_data['load'])
 	dict_grid.append(dict_data['grid'])
+
 	str_out = "AVG PV:%d | AVG LOAD:%d | AVG BAT:%d | AVG GRID:%d | SOC %d  %s" % (my_avg(dict_pv),my_avg(dict_load),my_avg(dict_bat),my_avg(dict_grid),dict_data['soc'],bat_stat_txt[dict_data['bat_sta']])
 #	print(str_out)
-	print(dict_bat)
-	print("--------------------------------------------------------------------")
+#	print(dict_bat)
+#	print("--------------------------------------------------------------------")
+
+	#check if battery is charged more then ..
 	if my_avg(dict_bat) > 2000 and dict_data['bat_sta'] == 3 and bat_mail > 0:
 		send_mail("SEMS INFO \r\n %s" %str_out)
 		bat_mail = 0
 
+	#check if soc has ..
 	if dict_data['soc'] == 70 and dict_data['bat_sta'] == 3 and soc_mail > 0:
                 send_mail("SEMS INFO Battery 70% \r\n %s" %str_out)
                 soc_mail = 0
