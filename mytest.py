@@ -4,19 +4,18 @@
 import json
 import time
 from mygoodwe import Goodwe
-from globals import *
 
 #params id,username,password
-gw = Goodwe(SEMS_ID,SEMS_USR,SEMS_PWD)
+gw = Goodwe('fbe32e72-d111-42b9-ac0f-bac5a66d30dd','radek@nakoukal.com','RadFre1977Goodwe')
+
+
 
 running = True
 while running:
 	gw.call()
-	print('dict')
-	print(gw.get_dict_data())
-	print('\n json')
+	print('json')
 	print(gw.get_json_data())
-	print('\n formated output')
+	print('formated output')
 	gw.show()
 	print("---------------------------")
 	time.sleep(60)
