@@ -78,5 +78,3 @@ while running:
                 soc_mail = 0
 
 	time.sleep(60)
-
-
