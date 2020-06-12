@@ -43,6 +43,10 @@ def send_mail(msg):
 
 
 def my_avg(my_dict):
+	len_dict = len(my_dict)
+	if len_dict==0:
+		len_dict=1
+
 	return round(sum(my_dict) / len(my_dict),0)
 
 
@@ -90,4 +94,4 @@ while running:
                 send_mail("SEMS INFO Battery 70% \r\n %s" %str_out)
                 soc_mail = 0
 
-	time.sleep(60)
+	time.sleep(300)
